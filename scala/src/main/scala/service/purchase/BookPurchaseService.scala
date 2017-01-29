@@ -24,6 +24,8 @@ case object BookPurchaseService {
     val validatedType: Either[String, Unit] = PaymentAndShippingService.verify(request.requestedPayment.paymentType, request.requestedShippingAddress.shippingType)
     if (validatedType.isLeft) return validatedType.right.map(_ => None)
 
+    // validate for isbn is less than 5
+    
     val (existingIsbns, nonexistentIsbns) = request.isbns.partition(stockRepository.hasStock)
     existingIsbns.foreach(stockRepository.pick)
 
