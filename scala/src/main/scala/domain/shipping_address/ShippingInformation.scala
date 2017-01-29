@@ -1,0 +1,3 @@
+package domain.shipping_address
+
+trait ShippingInformation

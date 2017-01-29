@@ -1,0 +1,76 @@
+@startuml
+
+package domain {
+  class UserId
+
+  class SessionId
+
+  class MailAddress
+
+  class Isbn
+
+  package payment {
+    class RequestedPayment
+
+    class CreditCard
+
+    enum PaymentType
+
+    RequestedPayment -->"0..1" CreditCard
+    RequestedPayment --> PaymentType
+
+    class ValidatedPayment
+
+    ValidatedPayment -up->"0..1" CreditCard
+    ValidatedPayment -up-> PaymentType
+
+    class ConvenienceStorePaymentCode
+
+    class PaymentService <<DomainService>> {
+      ValidatedPayment verify(RequestedPayment)
+    }
+  }
+
+  package shipping_address {
+    class RequestedShippingAddress
+
+    class ConvenienceStoreCode
+
+    class ShippingAddress {
+      Address
+      ZipCode
+    }
+
+    enum ShippingType
+
+    RequestedShippingAddress -right->"0..1" ConvenienceStoreCode
+    RequestedShippingAddress -->"0..1" ShippingAddress
+    RequestedShippingAddress --> ShippingType
+
+    interface ShippingInformation
+
+    ConvenienceStoreCode --|> ShippingInformation
+    ShippingAddress --|> ShippingInformation
+
+    class ValidatedShippingAddress
+
+    ValidatedShippingAddress -up-> ShippingInformation
+    ValidatedShippingAddress -up-> ShippingType
+
+    class ShippingAddressService <<DomainService>> {
+      ValidatedShippingAddress verify(RequestedShippingAddress)
+    }
+  }
+
+
+  class PurchaseRequest
+
+  PurchaseRequest -down-> UserId
+  PurchaseRequest -down-> SessionId
+  PurchaseRequest -down-> MailAddress
+  PurchaseRequest -down->"*" Isbn
+  PurchaseRequest -down-> RequestedPayment
+  PurchaseRequest -down-> RequestedShippingAddress
+}
+
+@enduml

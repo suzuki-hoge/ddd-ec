@@ -1,0 +1,31 @@
+@startuml
+
+class Book
+
+class BookId
+
+class BookName
+
+class ISBN
+
+enum Genre
+
+enum Language
+
+Book -down-> BookId
+Book -down-> BookName
+Book -down-> ISBN
+Book -down-> Genre
+Book -down-> Language
+
+class Filter
+
+Filter -up->"0..1" Genre
+Filter -up->"0..1" Language
+
+interface BookSearchRepository {
+  [Book] find(Filter)
+}
+
+
+@enduml
